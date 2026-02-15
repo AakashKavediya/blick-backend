@@ -3,6 +3,7 @@ import time
 import cv2
 import json
 import pyaudio
+import os
 from eyefeature import EyeTrackingMouse
 from smile import run_smile_control
 from head import run_head_control
@@ -30,7 +31,17 @@ def listen_with_vosk():
     """
     print("\n⏳ Loading Vosk model (OFFLINE)...")
     try:
-        model = Model("model")
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        MODEL_PATH = os.path.join(BASE_DIR, "model")
+
+        print(f"📂 Model path: {MODEL_PATH}")
+
+        if not os.path.exists(MODEL_PATH):
+            print("❌ Model folder NOT FOUND")
+            return None
+
+        model = Model(MODEL_PATH)
+
     except Exception as e:
         print(f"❌ Vosk model error: {e}")
         return None
